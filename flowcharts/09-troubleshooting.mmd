@@ -1,0 +1,14 @@
+flowchart TD
+    A(["發現問題"]) --> B{"需求 IO 不在 Library？"}
+    B -- 是 --> B1["查雲端 IO Tag.xlsx 是否已定義"] --> B2{"已定義？"}
+    B2 -- 是 --> B3["由 Library Points 對應資料夾拖曳<br/>（部分資料需於 Programming 的 Library 拉入）"]
+    B2 -- 否 --> B4["協同維護者新增並定義點位<br/>更新 IO Tag.xlsx 與 Library"]
+    B -- 否 --> C{"實際程式需求與模板不符？"}
+    C -- 是 --> C1{"冰機 > 6 / 水塔 > 4 /<br/>DXR / 空調箱 / 能源運算？"}
+    C1 -- 是 --> C2["超出適用範圍：自行撰寫 CFC"]
+    C1 -- 否 --> C3["以 Blocks 自行拼組模塊"]
+    C -- 否 --> D{"CC 畫面無數值？"}
+    D -- 是 --> D1["確認 Rooms & plants 路徑<br/>與 CC reference 對應"]
+    D -- 否 --> E{"Engineering 無法 connect？"}
+    E -- 是 --> E1["核對控制器 IP / Mask / Gateway / Instance<br/>與 IP 設定表一致"]
+    E -- 否 --> F["Email 回報維護者<br/>Phill.lin@siemens.com"]

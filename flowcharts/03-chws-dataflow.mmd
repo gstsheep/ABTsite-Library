@@ -1,0 +1,34 @@
+flowchart TD
+    subgraph IN["輸入點位"]
+        direction LR
+        CMD["總系統起停點<br/>CMD_B"]
+        NUM["可運轉系統數量<br/>W_DINT"]
+        RT["冰水總回水溫度計<br/>R_A"]
+        TA["加機溫度 W_A"]
+        TS["減機溫度 W_A"]
+        IA["加機間隔 W_DINT"]
+        IS["減機間隔 W_DINT"]
+        CHD["CH1~CH6<br/>En / 運轉時數 / 效率"]
+    end
+    SEQ["冰機順位比較模塊<br/>CFC"]
+    ADD["Add-ons and Subtractions<br/>加減機模塊 AddnSub<br/>CFC"]
+    CHD --> SEQ
+    SEQ -- "順位1~6冰機 → Sq1~Sq6" --> ADD
+    CMD -- StartStop --> ADD
+    NUM -- Num --> ADD
+    RT -- T --> ADD
+    TA -- "T Add-on" --> ADD
+    TS -- "T Sub-dn" --> ADD
+    IA -- "Add time" --> ADD
+    IS -- "Sub time" --> ADD
+    ADD -- "SYS1~SYS6" --> SYSn
+    subgraph SYSn["每一組系統 n（n = 1…6）"]
+        PRT["保護機制 Prt.Cnf_n<br/>CFC"]
+        OL["跳脫機制 OL.Cnf_n<br/>Overload configuration"]
+        RS["系統階段啟動 Sys.rs_n<br/>System run step"]
+        PRT -- "status → Protection CFC" --> RS
+        OL -- "OL → Alarm CFC" --> RS
+    end
+    RS --> OUT["冰水泵系統 / 區域泵系統 /<br/>冷卻水泵系統 / 水塔系統 / 冰機起停"]
+    CTS["冷卻系統 CTS<br/>水塔系統狀態 / CT 跳脫狀態"] -. "水塔狀態 / 水塔OL" .-> PRT
+    CTS -. "水塔OL" .-> OL

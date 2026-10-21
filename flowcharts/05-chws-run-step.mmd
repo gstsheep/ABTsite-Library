@@ -1,0 +1,20 @@
+flowchart TD
+    subgraph START["啟動程序（SYSn = ON）"]
+        direction TB
+        S0(["system ON/OFF = ON"]) --> S1{"Protection CFC status 正常<br/>且 Alarm CFC 無 OL？"}
+        S1 -- 否 --> SX["禁止啟動 / 發出警報"]
+        S1 -- 是 --> S2["① 冰水泵系統 ON"]
+        S2 --> S3["② 區域泵系統 ON"]
+        S3 --> S4["③ 冷卻水泵系統 ON"]
+        S4 --> S5["④ 水塔系統 ON"]
+        S5 --> S6{"開機確認時間內<br/>泵狀態 + 流量開關 確認？"}
+        S6 -- 否 --> SX
+        S6 -- 是 --> S7["⑤ 冰機起停 ON"]
+    end
+    subgraph STOP["停機程序（SYSn = OFF 或保護動作）"]
+        direction TB
+        T0(["system ON/OFF = OFF"]) --> T1["① 冰機起停 OFF"]
+        T1 --> T2["② 等待 關機除冷間隔<br/>（SYSn 除冷時間）"]
+        T2 --> T3["③ 水塔 / 冷卻水泵 / 區域泵 / 冰水泵 OFF"]
+    end
+    SX --> T1

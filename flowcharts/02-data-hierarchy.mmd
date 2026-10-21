@@ -1,0 +1,10 @@
+flowchart LR
+    P["Project<br/>ABTsite 專案"] --> B["Building<br/>自訂義或案場代碼<br/>例：N（XXX科技廠 N場）"]
+    B --> F1["Floor<br/>樓層代碼<br/>B1 / 01F / 02F / 03F"]
+    F1 --> AR["Area<br/>Ar + 流水號"]
+    AR --> SA["Subarea<br/>sbAr + 流水號"]
+    SA --> SC["Section<br/>sc + 流水號"]
+    F1 --> AS["Automation stations 視圖<br/>key：控制器位置<br/>例：N-B1F-001 PXC7.E400M"]
+    F1 --> RP["Rooms & plants 視圖<br/>key：供應或應用的區域<br/>例：CHWS 冰水系統"]
+    RP -. "Device 指派" .-> AS
+    RP ==> CC["Desigo CC 依此路徑建立"]

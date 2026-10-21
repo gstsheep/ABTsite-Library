@@ -1,0 +1,25 @@
+flowchart TD
+    A(["開始：新案場建置"]) --> B["取得完整程式檔案<br/>ABT site Library.s1cx / Sample.ABTArchive"]
+    B --> C["備份原始資料<br/>確認輸出資料夾寫入權限"]
+    C --> D["ABTsite → Library → Import<br/>匯入 ABT site Library.s1cx"]
+    D --> E{"Library 是否出現<br/>Blocks / Modbus / Plants / Points<br/>四個子資料夾？"}
+    E -- 否 --> E1["重新匯入 / 確認 ABTsite 版本 ≥ v5.2"] --> D
+    E -- 是 --> F{"首次使用？"}
+    F -- 是 --> F1["Restore project → Sample<br/>對照範例資料練習"] --> G
+    F -- 否 --> G["Building structure<br/>建立 Building / Floor / Area / Subarea / Section"]
+    G --> H["Show automation stations<br/>依 IP 設定表建立控制器<br/>Name / IP / Mask / Gateway / Instance"]
+    H --> I["Show rooms & plants<br/>建立 Plant：CWS / CHWS / CTS / *S<br/>指定 Device（控制器）"]
+    I --> J["準備 IO 表：列出需求點位"]
+    J --> K{"需求點位是否存在於<br/>IO Tag.xlsx / Library Points？"}
+    K -- 否 --> K1["協同維護者於 IO Tag.xlsx<br/>新增並定義點位"] --> K
+    K -- 是 --> L["Engineering → Plants<br/>拖曳 Points / Modbus 點位"]
+    L --> M{"系統是否符合模板？<br/>冰機 ≤ 6、水塔 ≤ 4<br/>非 DXR / 非空調箱"}
+    M -- 是 --> N["套用 Plants 模板<br/>冰水系統 / 冷卻系統"]
+    M -- 否 --> M1["自行撰寫 CFC<br/>或以 Blocks 自行拼組"] --> O
+    N --> O["設定參數<br/>加減機溫度、間隔、確認時間、除冷時間等"]
+    O --> P["Check → Download 至控制器"]
+    P --> Q["驗證 A：Engineering → connect → play<br/>檢查數值與程式運行"]
+    Q --> R["驗證 B：Desigo CC 指定畫面<br/>確認 reference 對應與系統流程"]
+    R --> S{"運轉結果正常？"}
+    S -- 否 --> T["依故障排除表處理"] --> O
+    S -- 是 --> U(["完成：交付 / 歸檔"])

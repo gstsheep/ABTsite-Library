@@ -1,0 +1,38 @@
+flowchart LR
+    CMD["水塔系統起停點<br/>CMD_B"]
+    LT["冷卻水總出水溫度計<br/>R_A (TM)"]
+    subgraph G1["頻率計算輸入"]
+        direction TB
+        DB["外氣乾球溫度計 R_A"]
+        RH["外氣相對濕度計 R_A"]
+        AP["趨近溫度設定 W_A"]
+        HI["輸出高限 W_A"]
+        LO["輸出低限 W_A"]
+        DIR["CTR 正反向 W_B"]
+    end
+    subgraph G2["加減機輸入"]
+        direction TB
+        TA["加機溫度 W_A"]
+        TS["減機溫度 W_A"]
+        NUM["可運轉系統數量 W_DINT"]
+        IA["加機間隔 W_DINT"]
+        IS["減機間隔 W_DINT"]
+        ST["CT1~CT4 變頻驅動狀態 R_B"]
+    end
+    TR["CT1~CT4 變頻驅動跳脫 R_B"]
+    FQ["水塔頻率計算<br/>CFC"]
+    AD["水塔加減機<br/>CFC"]
+    TJ["水塔跳脫判別<br/>CFC"]
+    CMD -- 水塔系統起停 --> FQ
+    CMD -- "cmd_b_1 → 水塔系統起停" --> AD
+    LT -- 出水溫 --> FQ
+    LT -- "TM → 出水溫" --> AD
+    G1 --> FQ
+    G2 --> AD
+    TR -- "CT1~CT4 OL" --> TJ
+    FQ -- "頻率 → ValIn1 Prio 16" --> VFD["CT1~CT4 變頻驅動控制<br/>CMD_A"]
+    AD -- "CTn 起停 → ValIn1 Prio 16" --> SS["CT1~CT4 變頻驅動起停<br/>CMD_B"]
+    AD -- CT狀態 --> CS["水塔系統狀態<br/>W_B"]
+    TJ -- CT跳脫狀態 --> CO["CT s 跳脫狀態<br/>W_B"]
+    CS -. "Interconnection" .-> EXT["冰水系統 CHWS<br/>保護機制 / 跳脫機制<br/>CTs.con.出水溫 / 水塔系統"]
+    CO -. "Interconnection" .-> EXT

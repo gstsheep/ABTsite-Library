@@ -1,0 +1,22 @@
+flowchart TD
+    subgraph P["保護機制 Prt.Cnf_n（CFC）"]
+        direction LR
+        P1["系統起停<br/>← AddnSub.SYSn"]
+        P2["開機確認時間<br/>← SYSn 確認時間"]
+        P3["維修點<br/>← SYSn 維修點"]
+        P4["冰水泵狀態 / 冰水流量開關<br/>← CHPn 狀態 / 流量開關"]
+        P5["冷卻水泵狀態 / 冷卻水流量開關<br/>← CWPn 狀態 / 流量開關"]
+        P6["水塔狀態<br/>← 水塔狀態.PrVal"]
+    end
+    subgraph O["跳脫機制 OL.Cnf_n（Overload configuration）"]
+        direction LR
+        O1["冰水泵OL<br/>← CHPn 跳脫"]
+        O2["冷卻水泵OL<br/>← CWPn 跳脫"]
+        O3["水塔OL<br/>← 水塔OL.PrVal"]
+        O4["冰機OL<br/>← CHn 跳脫"]
+    end
+    P -- "status → Protection CFC" --> RS["系統階段啟動 Sys.rs_n"]
+    O -- "OL → Alarm CFC" --> RS
+    RS --> R1{"維修中 / 狀態不符 / 任一 OL？"}
+    R1 -- 是 --> R2["該組系統停機或禁止啟動<br/>由加減機模塊依順位補位"]
+    R1 -- 否 --> R3["允許正常運轉"]
